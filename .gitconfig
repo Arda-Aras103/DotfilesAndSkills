@@ -1,0 +1,10 @@
+[init]
+	defaultBranch = main
+[core]
+	excludesfile = /home/arda/.gitignore_global
+	editor = zed
+[user]
+	email = cavduraras103@gmail.com
+	name = Arda-Aras103
+[color]
+	ui = true
