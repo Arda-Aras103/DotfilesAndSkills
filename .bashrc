@@ -249,3 +249,6 @@ find() {
   fi
 }
 # <<< rice-tui <<<
+
+# Avoid ksshaskpass/KWallet hangs during git/ssh operations on KDE Plasma
+unset SSH_ASKPASS GIT_ASKPASS

@@ -16,7 +16,7 @@ import re
 from collections import OrderedDict
 from pathlib import Path
 
-WORKSPACE = Path("/workspace")
+WORKSPACE = Path(__file__).resolve().parent.parent
 VOCAB_MD = WORKSPACE / "notes" / "40-english" / "vocabulary.md"
 INBOX_MD = WORKSPACE / "notes" / "00-inbox.md"
 VOCAB_HTML = WORKSPACE / "apps" / "vocab.html"
@@ -248,249 +248,331 @@ def build_html(entries: list[dict]) -> str:
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>İngilizce Sözlük ({len(entries)} Kelime)</title>
+<title>Sözlük · {len(entries)} Kelime</title>
 <style>
   :root {{
-    --bg: #1a1b26;
-    --bg-dark: #16161e;
-    --card: #24283b;
-    --card-hover: #292e42;
-    --border: #3b4261;
-    --fg: #c0caf5;
-    --fg-dim: #7982a9;
-    --fg-bright: #e0e8ff;
-    --blue: #7aa2f7;
-    --cyan: #7dcfff;
-    --purple: #bb9af7;
-    --green: #9ece6a;
-    --orange: #ff9e64;
-    --yellow: #e0af68;
+    --bg: #13141c;
+    --surface: #1b1d28;
+    --surface-hover: #212433;
+    --border: #272b3f;
+    --fg: #d8def6;
+    --fg-muted: #7b83a6;
+    --fg-bright: #f2f5ff;
+    --accent: #7aa2f7;
+    --accent-soft: rgba(122, 162, 247, 0.13);
+    --mark-bg: rgba(224, 175, 104, 0.24);
+    --mark-fg: #f0c674;
+    --chip-bg: #161822;
+    --shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+  }}
+  [data-theme="light"] {{
+    --bg: #f8f9fc;
+    --surface: #ffffff;
+    --surface-hover: #f2f4fa;
+    --border: #e3e7f0;
+    --fg: #2b3040;
+    --fg-muted: #6c748d;
+    --fg-bright: #111420;
+    --accent: #3b6ef5;
+    --accent-soft: rgba(59, 110, 245, 0.10);
+    --mark-bg: rgba(250, 204, 21, 0.35);
+    --mark-fg: #111420;
+    --chip-bg: #f3f5fa;
+    --shadow: 0 4px 16px rgba(17, 20, 32, 0.06);
   }}
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{
     font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: var(--bg);
     color: var(--fg);
-    line-height: 1.55;
-    min-height: 100vh;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background .15s, color .15s;
   }}
   header {{
     position: sticky;
     top: 0;
-    z-index: 20;
-    background: rgba(22, 22, 30, 0.94);
-    backdrop-filter: blur(10px);
+    z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--border);
-    padding: 14px 18px 10px;
   }}
-  .top-row {{
-    max-width: 1100px;
-    margin: 0 auto 10px;
+  .wrap {{
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }}
+  .header-inner {{
+    padding: 16px 0 11px;
+  }}
+  .search-row {{
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }}
+  .search-box {{
+    position: relative;
+    flex: 1;
+    display: flex;
     align-items: center;
   }}
-  .brand {{
-    font-weight: 700;
-    font-size: 1.05rem;
-    color: var(--blue);
-    white-space: nowrap;
-    margin-right: 4px;
-  }}
-  .search-wrap {{
-    flex: 1 1 280px;
-    position: relative;
+  .search-icon {{
+    position: absolute;
+    left: 14px;
+    color: var(--fg-muted);
+    pointer-events: none;
+    font-size: 0.92rem;
   }}
   #search {{
     width: 100%;
-    background: var(--card);
+    background: var(--surface);
     border: 1px solid var(--border);
     color: var(--fg-bright);
-    padding: 9px 70px 9px 14px;
-    border-radius: 8px;
-    font-size: 0.95rem;
+    padding: 11px 92px 11px 38px;
+    border-radius: 11px;
+    font-size: 0.96rem;
     outline: none;
-    transition: border-color .15s;
+    transition: border-color .15s, box-shadow .15s;
   }}
-  #search:focus {{ border-color: var(--blue); }}
-  .shortcut {{
+  #search:focus {{
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }}
+  #search::placeholder {{ color: var(--fg-muted); }}
+  .count {{
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.72rem;
-    color: var(--fg-dim);
-    background: var(--bg-dark);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 2px 6px;
-    pointer-events: none;
-  }}
-  .controls {{
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    align-items: center;
-  }}
-  select, button {{
-    background: var(--card);
-    color: var(--fg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 11px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: background .15s, border-color .15s;
-  }}
-  button:hover, select:hover {{ background: var(--card-hover); border-color: var(--blue); }}
-  button.active {{ background: var(--blue); color: var(--bg-dark); border-color: var(--blue); font-weight: 600; }}
-  .alpha-bar {{
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    gap: 3px;
-    flex-wrap: wrap;
-    align-items: center;
-  }}
-  .alpha-btn {{
-    padding: 3px 7px;
+    right: 14px;
     font-size: 0.76rem;
-    border-radius: 5px;
-    min-width: 26px;
-    text-align: center;
+    color: var(--fg-muted);
+    pointer-events: none;
+    font-variant-numeric: tabular-nums;
   }}
-  .meta-bar {{
-    max-width: 1100px;
-    margin: 10px auto 0;
-    padding: 0 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.82rem;
-    color: var(--fg-dim);
-  }}
-  main {{
-    max-width: 1100px;
-    margin: 12px auto 40px;
-    padding: 0 18px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 12px;
-  }}
-  .card {{
-    background: var(--card);
+  .icon-btn {{
+    background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    transition: border-color .15s, transform .1s;
+    color: var(--fg-muted);
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: border-color .15s, color .15s;
+    flex-shrink: 0;
   }}
-  .card:hover {{ border-color: var(--blue); }}
-  .card-head {{
+  .icon-btn:hover {{ border-color: var(--accent); color: var(--fg-bright); }}
+  .alpha {{
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 8px;
+    gap: 2px;
     flex-wrap: wrap;
+    margin-top: 10px;
+  }}
+  .alpha button {{
+    background: transparent;
+    border: none;
+    color: var(--fg-muted);
+    font-size: 0.76rem;
+    padding: 3px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: color .12s, background .12s;
+  }}
+  .alpha button:hover {{ color: var(--fg-bright); background: var(--surface); }}
+  .alpha button.active {{ color: var(--accent); font-weight: 600; background: var(--accent-soft); }}
+  main {{
+    padding: 14px 0 72px;
+  }}
+  .entry {{
+    border: 1px solid transparent;
+    border-bottom-color: var(--border);
+    padding: 14px 12px;
+    border-radius: 0;
+    cursor: pointer;
+    transition: background .12s, border-color .12s, border-radius .12s;
+  }}
+  .entry:hover {{
+    background: var(--surface);
+    border-radius: 10px;
+    border-color: transparent;
+  }}
+  .entry.open {{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin: 8px 0;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }}
+  .entry-head {{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }}
+  .word-group {{
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+    flex-wrap: wrap;
+    flex: 1;
+    min-width: 0;
   }}
   .word {{
-    font-size: 1.18rem;
-    font-weight: 700;
+    font-size: 1.08rem;
+    font-weight: 650;
     color: var(--fg-bright);
+    letter-spacing: -0.01em;
   }}
   .ipa {{
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.82rem;
-    color: var(--cyan);
+    font-size: 0.8rem;
+    color: var(--fg-muted);
   }}
-  .pos {{
-    font-size: 0.75rem;
-    color: var(--purple);
-    background: rgba(187, 154, 247, 0.12);
-    border: 1px solid rgba(187, 154, 247, 0.25);
-    padding: 1px 7px;
-    border-radius: 99px;
-  }}
-  .section-label {{
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--fg-dim);
-    margin-top: 2px;
-  }}
-  ul {{ list-style: none; display: flex; flex-direction: column; gap: 3px; }}
-  li {{ font-size: 0.9rem; }}
-  .phrases li {{ color: var(--green); font-size: 0.86rem; }}
-  .example {{
-    border-left: 3px solid var(--blue);
-    padding-left: 10px;
+  .speak-btn {{
+    background: transparent;
+    border: none;
+    color: var(--fg-muted);
+    cursor: pointer;
     font-size: 0.86rem;
+    padding: 2px 5px;
+    border-radius: 6px;
+    line-height: 1;
+    transition: color .12s, background .12s;
+  }}
+  .speak-btn:hover {{ color: var(--accent); background: var(--accent-soft); }}
+  .pos {{
+    font-size: 0.77rem;
+    color: var(--accent);
+    white-space: nowrap;
+  }}
+  .chev {{
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+    transition: transform .16s ease;
+    user-select: none;
+  }}
+  .entry.open .chev {{ transform: rotate(90deg); color: var(--accent); }}
+  .summary {{
+    margin-top: 4px;
+    font-size: 0.9rem;
+    color: var(--fg-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }}
+  .entry.open .summary {{ display: none; }}
+  .details {{
+    display: none;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }}
+  .entry.open .details {{ display: block; }}
+  .meanings {{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }}
+  .meanings li {{
+    font-size: 0.94rem;
     color: var(--fg);
-    background: rgba(22, 22, 30, 0.45);
-    padding: 6px 10px;
-    border-radius: 0 6px 6px 0;
   }}
-  .example .tr {{ color: var(--fg-dim); display: block; margin-top: 2px; }}
-  .quiz-hidden .card-body {{ filter: blur(6px); user-select: none; cursor: pointer; transition: filter .15s; }}
-  .quiz-hidden .card.revealed .card-body {{ filter: none; user-select: auto; }}
-  .load-more-wrap {{
-    max-width: 1100px;
-    margin: 0 auto 50px;
-    text-align: center;
+  .sub-block {{
+    margin-top: 12px;
   }}
-  #loadMore {{
-    padding: 10px 26px;
+  .sub-label {{
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fg-muted);
+    margin-bottom: 6px;
     font-weight: 600;
-    color: var(--blue);
+  }}
+  .phrases {{
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }}
+  .phrases li {{
+    font-size: 0.84rem;
+    color: var(--fg);
+    background: var(--chip-bg);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 7px;
+  }}
+  .example {{
+    border-left: 2px solid var(--accent);
+    padding: 2px 0 2px 12px;
+    font-size: 0.9rem;
+    color: var(--fg);
+  }}
+  .example .tr {{
+    display: block;
+    color: var(--fg-muted);
+    font-size: 0.86rem;
+    margin-top: 3px;
   }}
   mark {{
-    background: rgba(224, 175, 104, 0.28);
-    color: var(--yellow);
+    background: var(--mark-bg);
+    color: var(--mark-fg);
     border-radius: 3px;
     padding: 0 2px;
   }}
+  .more-wrap {{
+    text-align: center;
+    margin-top: 24px;
+  }}
+  #loadMore {{
+    background: var(--surface);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    padding: 9px 22px;
+    border-radius: 9px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: border-color .15s, color .15s;
+  }}
+  #loadMore:hover {{ border-color: var(--accent); color: var(--fg-bright); }}
+  .empty {{
+    text-align: center;
+    color: var(--fg-muted);
+    padding: 56px 0;
+    font-size: 0.95rem;
+  }}
   @media (max-width: 600px) {{
-    main {{ grid-template-columns: 1fr; padding: 0 10px; }}
-    header {{ padding: 10px 10px 8px; }}
+    .wrap {{ padding: 0 12px; }}
+    .entry {{ padding: 13px 8px; }}
+    .entry.open {{ padding: 14px 14px; }}
+    .pos {{ display: none; }}
+    .entry.open .pos {{ display: inline; }}
   }}
 </style>
 </head>
 <body>
 <header>
-  <div class="top-row">
-    <div class="brand">Sözlük</div>
-    <div class="search-wrap">
-      <input id="search" type="search" placeholder="Kelime, Türkçe anlam veya kalıp ara..." autocomplete="off" autofocus>
-      <span class="shortcut">/</span>
+  <div class="wrap header-inner">
+    <div class="search-row">
+      <div class="search-box">
+        <span class="search-icon">⌕</span>
+        <input id="search" type="search" placeholder="Kelime, anlam veya kalıp ara... (/)" autocomplete="off" autofocus>
+        <span class="count" id="stats">{len(entries)} kelime</span>
+      </div>
+      <button class="icon-btn" id="themeBtn" title="Açık / Koyu Tema">◐</button>
     </div>
-    <div class="controls">
-      <select id="posFilter" title="Kelime türü">
-        <option value="">Tüm Türler</option>
-        <option value="isim">İsim</option>
-        <option value="fiil">Fiil</option>
-        <option value="sıfat">Sıfat</option>
-        <option value="zarf">Zarf</option>
-        <option value="deyim">Deyim / Öbek</option>
-      </select>
-      <button id="quizBtn" title="Anlamları gizle, karta tıklayınca göster">Quiz Modu</button>
-      <button id="randomBtn" title="Rastgele kelime getir">Rastgele</button>
-    </div>
+    <nav class="alpha" id="alphaBar"></nav>
   </div>
-  <div class="alpha-bar" id="alphaBar"></div>
 </header>
 
-<div class="meta-bar">
-  <span id="stats">Yükleniyor...</span>
-  <span id="quizHint" style="display:none;color:var(--yellow)">Quiz modu açık — anlamı görmek için karta tıkla</span>
-</div>
-
-<main id="grid"></main>
-<div class="load-more-wrap">
-  <button id="loadMore" style="display:none">Daha fazla göster</button>
-</div>
+<main class="wrap">
+  <div id="list"></div>
+  <div class="more-wrap">
+    <button id="loadMore" style="display:none">Daha fazla göster</button>
+  </div>
+</main>
 
 <script>
 const RAW = {data_json};
@@ -507,143 +589,152 @@ const DATA = RAW.map(r => ({{
   p: r[4],
   ex: r[5],
   wNorm: norm(r[0]),
-  posNorm: norm(r[2]),
-  blob: norm([r[0], r[2], ...r[3], ...r[4], ...r[5]].join(" "))
+  blob: norm([r[0], ...r[3], ...r[4], ...r[5]].join(" "))
 }}));
 
 let activeLetter = "";
+let currentQuery = "";
 let filtered = DATA;
 let shown = 0;
-const PAGE = 60;
-let quizMode = false;
+const PAGE = 80;
 
 const searchEl = document.getElementById("search");
-const posEl = document.getElementById("posFilter");
-const gridEl = document.getElementById("grid");
+const listEl = document.getElementById("list");
 const statsEl = document.getElementById("stats");
 const loadMoreEl = document.getElementById("loadMore");
 const alphaBar = document.getElementById("alphaBar");
-const quizBtn = document.getElementById("quizBtn");
-const quizHint = document.getElementById("quizHint");
-const randomBtn = document.getElementById("randomBtn");
+const themeBtn = document.getElementById("themeBtn");
 
-const letters = ["Tümü", ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")];
-letters.forEach(lt => {{
+const savedTheme = localStorage.getItem("vocab-theme");
+if (savedTheme === "light") document.documentElement.setAttribute("data-theme", "light");
+themeBtn.onclick = () => {{
+  const isLight = document.documentElement.getAttribute("data-theme") === "light";
+  if (isLight) {{
+    document.documentElement.removeAttribute("data-theme");
+    localStorage.setItem("vocab-theme", "dark");
+  }} else {{
+    document.documentElement.setAttribute("data-theme", "light");
+    localStorage.setItem("vocab-theme", "light");
+  }}
+}};
+
+["Tümü", ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")].forEach(lt => {{
   const b = document.createElement("button");
-  b.className = "alpha-btn" + (lt === "Tümü" ? " active" : "");
   b.textContent = lt;
+  if (lt === "Tümü") b.className = "active";
   b.onclick = () => {{
     activeLetter = lt === "Tümü" ? "" : lt.toLowerCase();
-    document.querySelectorAll(".alpha-btn").forEach(x => x.classList.remove("active"));
+    alphaBar.querySelectorAll("button").forEach(x => x.classList.remove("active"));
     b.classList.add("active");
     applyFilter();
   }};
   alphaBar.appendChild(b);
 }});
 
-function esc(s) {{
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+function highlight(text, q) {{
+  const safe = esc(text);
+  if (!q || q.length < 2) return safe;
+  const re = new RegExp("(" + q.replace(/[.*+?^${{}}()|[\\]\\\\]/g, "\\\\$&") + ")", "gi");
+  return safe.replace(re, "<mark>$1</mark>");
 }}
 
-function renderCard(item) {{
-  const card = document.createElement("article");
-  card.className = "card";
-  card.onclick = () => {{ if (quizMode) card.classList.toggle("revealed"); }};
+function speak(word, ev) {{
+  ev.stopPropagation();
+  if (!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = "en-US";
+  u.rate = 0.95;
+  window.speechSynthesis.speak(u);
+}}
 
-  const meaningsHtml = item.m.map(x => `<li>${{esc(x)}}</li>`).join("");
-  const phrasesHtml = item.p.length
-    ? `<div class="section-label">Kalıplar</div><ul class="phrases">${{item.p.map(x => `<li>${{esc(x)}}</li>`).join("")}}</ul>`
+function renderEntry(item, autoOpen) {{
+  const el = document.createElement("article");
+  el.className = "entry" + (autoOpen ? " open" : "");
+  el.onclick = () => el.classList.toggle("open");
+
+  const q = currentQuery;
+  const firstMeaning = item.m[0] || "";
+  const meanings = item.m.map(x => `<li>${{highlight(x, q)}}</li>`).join("");
+  const phrases = item.p.length
+    ? `<div class="sub-block"><div class="sub-label">Kalıplar</div><ul class="phrases">${{item.p.map(x => `<li>${{highlight(x, q)}}</li>`).join("")}}</ul></div>`
     : "";
-  let exHtml = "";
+  let examples = "";
   if (item.ex.length) {{
-    const lines = item.ex.map(line =>
-      line.startsWith("(") ? `<span class="tr">${{esc(line)}}</span>` : `<div>${{esc(line)}}</div>`
-    ).join("");
-    exHtml = `<div class="section-label">Örnek</div><div class="example">${{lines}}</div>`;
+    const lines = item.ex.map(l => l.startsWith("(") ? `<span class="tr">${{esc(l)}}</span>` : `<div>${{esc(l)}}</div>`).join("");
+    examples = `<div class="sub-block"><div class="sub-label">Örnek</div><div class="example">${{lines}}</div></div>`;
   }}
 
-  card.innerHTML = `
-    <div class="card-head">
-      <div>
-        <span class="word">${{esc(item.w)}}</span>
-        ${{item.ipa ? `<span class="ipa">${{esc(item.ipa)}}</span>` : ""}}
+  el.innerHTML = `
+    <div class="entry-head">
+      <div class="word-group">
+        <span class="word">${{highlight(item.w, q)}}</span>
+        ${{item.ipa && item.ipa !== "—" ? `<span class="ipa">${{esc(item.ipa)}}</span>` : ""}}
+        <button class="speak-btn" title="Telaffuzu dinle" aria-label="Dinle">🔊</button>
       </div>
       ${{item.pos ? `<span class="pos">${{esc(item.pos)}}</span>` : ""}}
+      <span class="chev">›</span>
     </div>
-    <div class="card-body">
-      <ul>${{meaningsHtml}}</ul>
-      ${{phrasesHtml}}
-      ${{exHtml}}
+    <div class="summary">${{highlight(firstMeaning, q)}}</div>
+    <div class="details">
+      <ul class="meanings">${{meanings}}</ul>
+      ${{phrases}}
+      ${{examples}}
     </div>
   `;
-  return card;
+  el.querySelector(".speak-btn").onclick = ev => speak(item.w, ev);
+  return el;
 }}
 
 function renderMore() {{
   const frag = document.createDocumentFragment();
+  const autoOpen = filtered.length <= 5;
   const next = filtered.slice(shown, shown + PAGE);
-  next.forEach(item => frag.appendChild(renderCard(item)));
-  gridEl.appendChild(frag);
+  next.forEach(item => frag.appendChild(renderEntry(item, autoOpen)));
+  listEl.appendChild(frag);
   shown += next.length;
   loadMoreEl.style.display = shown < filtered.length ? "inline-block" : "none";
   loadMoreEl.textContent = `Daha fazla göster (${{shown}} / ${{filtered.length}})`;
 }}
 
 function applyFilter() {{
-  const q = norm(searchEl.value.trim());
-  const pos = norm(posEl.value);
-
+  currentQuery = searchEl.value.trim();
+  const q = norm(currentQuery);
   filtered = DATA.filter(item => {{
     if (activeLetter && !item.wNorm.startsWith(activeLetter)) return false;
-    if (pos) {{
-      if (pos === "deyim") {{
-        if (!item.posNorm.includes("deyim") && !item.posNorm.includes("obek") && !item.posNorm.includes("tamlama") && !item.posNorm.includes("kalip")) return false;
-      }} else if (!item.posNorm.includes(pos)) return false;
-    }}
     if (q && !item.blob.includes(q)) return false;
     return true;
   }});
 
-  // Rank exact/prefix word matches first when searching
   if (q) {{
     filtered.sort((a, b) => {{
-      const aExact = a.wNorm === q ? 0 : a.wNorm.startsWith(q) ? 1 : a.wNorm.includes(q) ? 2 : 3;
-      const bExact = b.wNorm === q ? 0 : b.wNorm.startsWith(q) ? 1 : b.wNorm.includes(q) ? 2 : 3;
-      return aExact - bExact || a.wNorm.localeCompare(b.wNorm);
+      const rank = x => x.wNorm === q ? 0 : x.wNorm.startsWith(q) ? 1 : x.wNorm.includes(q) ? 2 : 3;
+      return rank(a) - rank(b) || a.wNorm.localeCompare(b.wNorm);
     }});
   }}
 
-  gridEl.innerHTML = "";
+  listEl.innerHTML = "";
   shown = 0;
-  statsEl.textContent = `${{filtered.length}} / ${{DATA.length}} kelime gösteriliyor`;
+  statsEl.textContent = filtered.length === DATA.length
+    ? `${{DATA.length}} kelime`
+    : `${{filtered.length}} / ${{DATA.length}}`;
+
+  if (!filtered.length) {{
+    listEl.innerHTML = '<div class="empty">Sonuç bulunamadı.</div>';
+    loadMoreEl.style.display = "none";
+    return;
+  }}
   renderMore();
 }}
 
 let timer;
 searchEl.addEventListener("input", () => {{
   clearTimeout(timer);
-  timer = setTimeout(applyFilter, 60);
+  timer = setTimeout(applyFilter, 50);
 }});
-posEl.addEventListener("change", applyFilter);
 loadMoreEl.addEventListener("click", renderMore);
-
-quizBtn.addEventListener("click", () => {{
-  quizMode = !quizMode;
-  quizBtn.classList.toggle("active", quizMode);
-  gridEl.classList.toggle("quiz-hidden", quizMode);
-  quizHint.style.display = quizMode ? "inline" : "none";
-  document.querySelectorAll(".card.revealed").forEach(c => c.classList.remove("revealed"));
-}});
-
-randomBtn.addEventListener("click", () => {{
-  const pool = filtered.length ? filtered : DATA;
-  const pick = pool[Math.floor(Math.random() * pool.length)];
-  gridEl.innerHTML = "";
-  gridEl.appendChild(renderCard(pick));
-  shown = 1;
-  loadMoreEl.style.display = "none";
-  statsEl.textContent = `Rastgele kelime (havuz: ${{pool.length}}) — tüm listeye dönmek için aramayı değiştir`;
-}});
 
 document.addEventListener("keydown", e => {{
   if (e.key === "/" && document.activeElement !== searchEl) {{
