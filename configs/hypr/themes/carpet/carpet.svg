@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <!-- Crimson Persian weave ground -->
+    <pattern id="rugWeave" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#7d1313"/>
+      <path d="M 0 0 L 16 16 M 16 0 L 0 16" stroke="#620d0d" stroke-width="1" opacity="0.55"/>
+    </pattern>
+
+    <!-- Ornamental repeating medallion tile -->
+    <pattern id="medallionGrid" width="300" height="266" patternUnits="userSpaceOnUse">
+      <rect width="300" height="266" fill="url(#rugWeave)"/>
+
+      <!-- Corner indigo & gold arabesque accents -->
+      <polygon points="0,0 56,0 32,32 0,56" fill="#162738" stroke="#c98e2c" stroke-width="2"/>
+      <polygon points="300,0 244,0 268,32 300,56" fill="#162738" stroke="#c98e2c" stroke-width="2"/>
+      <polygon points="0,266 56,266 32,234 0,210" fill="#162738" stroke="#c98e2c" stroke-width="2"/>
+      <polygon points="300,266 244,266 268,234 300,210" fill="#162738" stroke="#c98e2c" stroke-width="2"/>
+
+      <!-- Outer stepped ivory/gold medallion -->
+      <g transform="translate(150 133)">
+        <polygon points="0,-106 32,-76 68,-64 78,-28 114,0 78,28 68,64 32,76 0,106 -32,76 -68,64 -78,28 -114,0 -78,-28 -68,-64 -32,-76"
+                 fill="#e6dcc0" stroke="#162738" stroke-width="3"/>
+        <polygon points="0,-84 24,-58 52,-48 60,-20 88,0 60,20 52,48 24,58 0,84 -24,58 -52,48 -60,20 -88,0 -60,-20 -52,-48 -24,-58"
+                 fill="#1c5c4a" stroke="#c98e2c" stroke-width="2.5"/>
+        <polygon points="0,-58 18,-36 38,-28 46,0 38,28 18,36 0,58 -18,36 -38,28 -46,0 -38,-28 -18,-36"
+                 fill="#162738" stroke="#e6dcc0" stroke-width="2"/>
+        <polygon points="0,-34 16,-16 34,0 16,16 0,34 -16,16 -34,0 -16,-16"
+                 fill="#c98e2c" stroke="#7d1313" stroke-width="2"/>
+        <circle cx="0" cy="0" r="10" fill="#e6dcc0" stroke="#162738" stroke-width="2"/>
+      </g>
+
+      <!-- Small geometric blossoms around medallion -->
+      <g fill="#c98e2c" stroke="#162738" stroke-width="1.4">
+        <polygon points="150,14 158,24 150,34 142,24"/>
+        <polygon points="150,232 158,242 150,252 142,242"/>
+        <polygon points="24,133 34,123 44,133 34,143"/>
+        <polygon points="256,133 266,123 276,133 266,143"/>
+      </g>
+    </pattern>
+
+    <!-- Border rosette chain -->
+    <pattern id="borderRosette" width="60" height="44" patternUnits="userSpaceOnUse">
+      <rect width="60" height="44" fill="#162738"/>
+      <rect x="0" y="3" width="60" height="4" fill="#c98e2c"/>
+      <rect x="0" y="37" width="60" height="4" fill="#c98e2c"/>
+      <polygon points="30,9 42,22 30,35 18,22" fill="#8e1616" stroke="#e6dcc0" stroke-width="1.5"/>
+      <circle cx="30" cy="22" r="4" fill="#c98e2c"/>
+      <polygon points="0,22 8,15 8,29" fill="#1c5c4a"/>
+      <polygon points="60,22 52,15 52,29" fill="#1c5c4a"/>
+    </pattern>
+  </defs>
+
+  <!-- Central carpet field -->
+  <rect width="1200" height="800" fill="url(#medallionGrid)"/>
+
+  <!-- Ornate Persian border frame -->
+  <rect x="0" y="0" width="1200" height="44" fill="url(#borderRosette)"/>
+  <rect x="0" y="756" width="1200" height="44" fill="url(#borderRosette)"/>
+  <rect x="0" y="44" width="44" height="712" fill="#162738" stroke="#c98e2c" stroke-width="3"/>
+  <rect x="1156" y="44" width="44" height="712" fill="#162738" stroke="#c98e2c" stroke-width="3"/>
+  <rect x="44" y="44" width="1112" height="712" fill="none" stroke="#e6dcc0" stroke-width="3"/>
+</svg>

@@ -1,0 +1,74 @@
+/* Tokyo Night palette for Zen Browser UI */
+:root {
+  --zen-primary-color: #7aa2f7 !important;
+  --zen-colors-primary: #7aa2f7 !important;
+  --zen-colors-secondary: #16161e !important;
+  --zen-colors-tertiary: #24283b !important;
+  --zen-colors-border: #2f3549 !important;
+  --zen-main-browser-background: #1a1b26 !important;
+  --zen-dialog-background: #16161e !important;
+  --zen-themed-toolbar-bg: #16161e !important;
+  --zen-themed-toolbar-bg-transparent: #16161e !important;
+  --lwt-accent-color: #16161e !important;
+  --lwt-text-color: #c0caf5 !important;
+  --toolbar-bgcolor: #16161e !important;
+  --toolbar-color: #c0caf5 !important;
+  --toolbar-field-background-color: #24283b !important;
+  --toolbar-field-color: #c0caf5 !important;
+  --toolbar-field-border-color: #3b4261 !important;
+  --toolbarbutton-hover-background: #24283b !important;
+  --toolbarbutton-active-background: #283457 !important;
+}
+
+#navigator-toolbox,
+#titlebar,
+#zen-main-app-wrapper,
+#zen-sidebar-splitter,
+#zen-sidebar-top-buttons,
+#vertical-pinned-tabs-container,
+.zen-workspace-tabs-section {
+  background: #16161e !important;
+  background-color: #16161e !important;
+  color: #c0caf5 !important;
+}
+
+#zen-appcontent-wrapper,
+#browser,
+#tabbrowser-tabbox,
+#tabbrowser-tabpanels,
+browser[type="content"] {
+  background: #1a1b26 !important;
+  background-color: #1a1b26 !important;
+}
+
+#urlbar-background {
+  background-color: #24283b !important;
+  border: 1px solid #3b4261 !important;
+}
+
+#urlbar[focused="true"] > #urlbar-background {
+  border-color: #7aa2f7 !important;
+}
+
+#urlbar-input {
+  color: #c0caf5 !important;
+}
+
+.tabbrowser-tab .tab-background {
+  border-radius: 8px !important;
+}
+
+.tabbrowser-tab:hover .tab-background {
+  background-color: #24283b !important;
+}
+
+.tabbrowser-tab[selected="true"] .tab-background,
+.zen-essentials-container .tabbrowser-tab[selected="true"] .tab-background {
+  background-color: #283457 !important;
+  outline: 1px solid rgba(122, 162, 247, 0.55) !important;
+}
+
+.zen-essentials-container .tabbrowser-tab .tab-background {
+  background-color: #1f2335 !important;
+  border: 1px solid #292e42 !important;
+}

@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Cyber Tokyo
+Description=Minimal obsidian and bronze/Tokyo Night boot splash theme
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/cyber-tokyo
+ScriptFile=/usr/share/plymouth/themes/cyber-tokyo/cyber-tokyo.script

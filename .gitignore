@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Secrets & local overrides
+.env
+.env.*
+!.env.example
+keys.env
+*.pem
+*.key
+
+# Personal media / runtime artifacts
+configs/sddm/cyber-wireframe/login-photo.jpg
+configs/zen/hidden-opportunities.txt
+
+# OS & Editors
+.DS_Store
+Thumbs.db
+*.swp
+*.log

@@ -1,0 +1,158 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/deepseek-v4.1-flash-free",
+  "default_agent": "build",
+  "share": "disabled",
+  "update": "disable",
+  "providers": {
+    "groq": {
+      "env": [
+        "GROQ_API_KEY"
+      ]
+    },
+    "openrouter": {
+      "env": [
+        "OPENROUTER_API_KEY"
+      ]
+    },
+    "nvidia": {
+      "env": [
+        "NVIDIA_API_KEY"
+      ]
+    },
+    "google": {
+      "env": [
+        "GEMINI_API_KEY",
+        "GOOGLE_GENERATIVE_AI_API_KEY"
+      ]
+    },
+    "github-copilot": {}
+  },
+  "permissions": [
+    {
+      "action": "read",
+      "resource": "*.env",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
+      "resource": "*.env.*",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
+      "resource": "*.env.example",
+      "effect": "allow"
+    },
+    {
+      "action": "read",
+      "resource": "**/profile.md",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
+      "resource": "**/ArdaArasCavdur_CV.pdf",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
+      "resource": "**/reports/applications.md",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
+      "resource": "**/reports/career.md",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
+      "resource": "**/.ssh/**",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
+      "resource": "**/.gnupg/**",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
+      "resource": "**/.aws/**",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
+      "resource": "**/.gemini/**",
+      "effect": "deny"
+    },
+    {
+      "action": "edit",
+      "resource": "**/.agents/hooks.json",
+      "effect": "deny"
+    },
+    {
+      "action": "edit",
+      "resource": "**/scripts/pretool_safety_guard.py",
+      "effect": "deny"
+    },
+    {
+      "action": "edit",
+      "resource": "**/scripts/posttool_validator.py",
+      "effect": "deny"
+    },
+    {
+      "action": "edit",
+      "resource": "**/scripts/hook_common.py",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "rm -rf /*",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "rm -rf /workspace*",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "git push*",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "sudo *",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "*profile.md*",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "*ArdaArasCavdur_CV.pdf*",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "*reports/applications.md*",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "*reports/career.md*",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "*/.ssh/*",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "*/.gemini/*",
+      "effect": "deny"
+    }
+  ]
+}

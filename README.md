@@ -1,49 +1,107 @@
 # DotfilesAndSkills
 
-Personal Debian 13 dotfiles, shell configuration, and Claude skill files.
+Personal **Fedora Linux + KDE Plasma 6 (Wayland)** dotfiles, unified **Tokyo Night** desktop rice (with paired revert scripts), **19 modular AI agent skills**, and **Antigravity lifecycle hooks**.
 
-## Contents
+## Repository Structure
 
-- `.bashrc`: interactive shell configuration (PATH, aliases, prompt, helper functions)
-- `.profile`: login shell entry point, loads `.bashrc`
-- `.bash_logout`: clears the console on exit of a login shell
-- `.gitignore_global`: global ignore rules for all repositories
-- `.gitconfig`: Git identity and global excludes file
-- `apps.md`: Debian setup guide (packages, Flatpak apps, Steam, NVIDIA, eduroam)
-- `install-tuis.sh`: installs terminal tools into `~/.local/bin`
-- `.config/`: selected application configuration directories
-- `skills/`: Claude skill definitions
+```text
+.
+├── .bashrc                 # Interactive Bash config (Starship, Atuin, eza, bat, fzf, yazi, Fedora aliases)
+├── .gitconfig              # Git defaults and global ignore wiring
+├── .gitignore_global       # Global gitignore patterns
+├── .profile                # Login shell entry point
+├── configs/                # Application, terminal, KDE, Hypr/KWin, SDDM, Plymouth, EasyEffects & Zen configs
+├── docs/
+│   ├── fedora-setup.md     # Fedora + KDE Plasma + Flatpak + DevOps bootstrap guide
+│   └── ssh.md              # GitHub SSH key setup guide
+├── hooks/                  # Antigravity PreToolUse / PostToolUse / PreInvocation / Stop / SessionStart hooks
+├── scripts/                # Paired *-rice.sh / *-revert.sh scripts + apply-all.sh / revert-all.sh + doctors
+└── skills/                 # 19 modular AI agent skills (SKILL.md + helper scripts & references)
+```
 
-## Restore
+## Quick Start
 
-Clone the repository and link the files into the home directory. [GNU Stow](https://www.gnu.org/software/stow/) is the intended tool:
+### 1. Shell & Git Dotfiles
 
 ```bash
 git clone git@github.com:Arda-Aras103/DotfilesAndSkills.git ~/DotfilesAndSkills
 cd ~/DotfilesAndSkills
-stow -t ~ bash git
+cp .bashrc ~/.bashrc
+cp .profile ~/.profile
+cp .gitconfig ~/.gitconfig
+cp .gitignore_global ~/.gitignore_global
+source ~/.bashrc
 ```
 
-Then open a new shell, or run `source ~/.bashrc`.
+*(Alternatively, organize into GNU Stow packages if you prefer symlink management.)*
 
-Run `gh auth login` and `atuin import auto` again on the new machine. Credentials and shell history are not stored in this repository.
+### 2. KDE Plasma 6 Tokyo Night Rice
 
-## Not included
-
-The following are intentionally excluded. They hold credentials, private history, or machine-specific state:
-
-- `~/.ssh/`, `~/.aws/`, `~/.docker/`
-- `~/.bash_history`, `~/.lesshst`, `~/.local/share/atuin/`
-- `~/.config/gh/hosts.yml` and any other token file
-- Browser profiles, Steam libraries, and messaging app sessions
-- Project source code (kept in separate repositories)
-
-## Security
-
-Before pushing, check that no secrets are tracked:
+Apply the full desktop, panel, GTK, terminal, CLI/TUI, Zen Browser, Zed, and Obsidian theme suite:
 
 ```bash
-git ls-files | xargs grep -lEi 'token|secret|password|api[_-]?key' 2>/dev/null
+./scripts/apply-all.sh
 ```
 
-Keep this repository private unless you have reviewed every file.
+Revert all rice changes cleanly:
+
+```bash
+./scripts/revert-all.sh
+```
+
+> **Note (SDDM `cyber-wireframe`):** Personal login photos are excluded from this public repository. `configs/sddm/cyber-wireframe/` falls back to `default-frame.svg`, or you can place your own `login-photo.jpg` inside `configs/sddm/cyber-wireframe/` before running `scripts/sddm-cyber-rice.sh`.
+
+### 3. AI Agent Skills (`skills/`)
+
+Copy or symlink `skills/` into your workspace's `.agents/skills/` (or `~/.claude/skills/`):
+
+| Skill | Purpose |
+| :--- | :--- |
+| `academic-notes` | Structured Markdown study notes & 5-level TextFold digests for arXiv papers and lectures |
+| `application-tracker` | Internship/job pipeline tracking, CV/ATS keyword matching, and portfolio coaching |
+| `attendance-tracker` | University course attendance & absence tracking |
+| `channel-radar` | Weekly YouTube channel video radar (last 168h, skips Shorts/members-only) |
+| `fedora-sysadmin` | Fedora & KDE Wayland diagnostics, Wi-Fi/systemd/D-Bus fixes, Stow & dotfile audits |
+| `google-calendar` | Generates copy-paste Google Calendar prompts from deadlines and trackers |
+| `handoff` | Compacts session state, verified facts, blockers, and next commands into a handoff note |
+| `improve-codebase-architecture` | Read-only architectural survey for shallow modules and deep-module refactor proposals |
+| `inbox-triage` | Triages dropped links, repos, videos, and screenshots against user preferences |
+| `kde-tokyo-rice` | KDE Plasma 6 Wayland Hyprland-style ricing & Tokyo Night unification |
+| `media-game-guide` | Runtime cards, continue/drop decisions, QoL mod loadouts, and settings tables |
+| `media-web-archiver` | YouTube (`yt-dlp`), batch direct downloads (`wget`), and offline single-file HTML archiving |
+| `opportunity-scan` | Weekly/monthly scan of internships, hackathons, cloud vouchers, and term windows |
+| `opportunity-verdict` | Listing/scholarship verdicts (`apply`/`shaky`/`skip`) and 100-point hackathon Fit Scores |
+| `playwright-cli` | Token-efficient interactive web testing and SPA debugging via `playwright-cli` |
+| `repo-inspector` | Codebase onboarding and pre-release readiness audits (Rust, Go, Python, WebExtensions) |
+| `reverse-inspect` | Evidence-based binary/bundle inspection (ELF, PE, asar, JS bundles, HAR, Ghidra/REA) |
+| `skill-workshop` | Designs, evaluates, creates, and patches workspace `SKILL.md` files |
+| `vocabulary` | Formats English vocabulary entries into compact Markdown dictionary tables with validation |
+
+### 4. Agent Lifecycle Hooks (`hooks/`)
+
+Includes `hooks/hooks.json` and 6 Python hook scripts:
+
+- `pretool_safety_guard.py` — hard-blocks catastrophic `rm`/destructive commands and private credential reads; forces confirmation on risky operations.
+- `posttool_validator.py` — validates edits/commands after execution.
+- `preinvocation_feedback.py` — pre-invocation guard/feedback hook.
+- `stop_verification_gate.py` — stop-time verification check.
+- `session_start_context.py` — injects session-start context and deadline reminders.
+- `hook_common.py` — shared JSON I/O and tool-matching helpers.
+
+To wire them into an Antigravity workspace, place `hooks.json` in `.agents/hooks.json` and point its command paths to where you place the Python hook scripts.
+
+## Intentionally Excluded
+
+Never tracked in this repository:
+
+- `~/.ssh/`, `~/.aws/`, `~/.gnupg/`, `~/.docker/`, `~/.gemini/`
+- Shell history (`~/.bash_history`, `~/.local/share/atuin/`)
+- API keys, `.env` / `keys.env`, `gh/hosts.yml`, or any token files
+- Personal photos (`login-photo.jpg`), CVs, private reports, or personal opportunity filter lists
+- Browser profiles, Steam libraries, and cache/bytecode (`__pycache__/`)
+
+## Security Check Before Pushing
+
+```bash
+git ls-files | xargs grep -lEi 'sk-[a-z0-9]{20}|ghp_[a-z0-9]{20}|AIza[0-9A-Za-z_-]{30}|AKIA[0-9A-Z]{16}|api[_-]?key\s*[:=]' 2>/dev/null
+```

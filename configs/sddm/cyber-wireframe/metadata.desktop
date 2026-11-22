@@ -1,0 +1,15 @@
+[SddmGreeterTheme]
+Name=Cyber Wireframe
+Description=Minimal cream and charcoal cyber-wireframe SDDM greeter theme
+Author=Arda Aras Cavdur
+Copyright=(c) 2026
+License=MIT
+Type=sddm-theme
+Version=1.0
+Website=https://github.com/
+Screenshot=default-frame.svg
+MainScript=Main.qml
+ConfigFile=theme.conf
+TranslationsDirectory=translations
+Theme-Id=cyber-wireframe
+Theme-API=2.0

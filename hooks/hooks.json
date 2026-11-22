@@ -1,0 +1,53 @@
+{
+  "safety-gate": {
+    "PreToolUse": [
+      {
+        "matcher": "run_command|read_file|view_file|write_file|edit_file|write_to_file|replace_file_content|multi_replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ./pretool_safety_guard.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "post-edit-validator": {
+    "PostToolUse": [
+      {
+        "matcher": "run_command|write_file|edit_file|write_to_file|replace_file_content|multi_replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ./posttool_validator.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "python3 ./preinvocation_feedback.py",
+        "timeout": 5
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "python3 ./stop_verification_gate.py",
+        "timeout": 5
+      }
+    ]
+  },
+  "deadline-watch": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "python3 ./session_start_context.py",
+        "timeout": 5
+      }
+    ]
+  }
+}

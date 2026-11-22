@@ -1,0 +1,20 @@
+{
+  "KPackageStructure": "Plasma/Applet",
+  "X-Plasma-API": "declarativeappletscript",
+  "X-Plasma-API-Minimum-Version": "6.0",
+  "X-Plasma-MainScript": "ui/main.qml",
+  "KPlugin": {
+    "Id": "org.kde.plasma.cyberclock",
+    "Name": "Cyber Typographic Clock",
+    "Description": "Minimal transparent centered typographic clock and date widget for KDE Plasma 6.",
+    "Category": "Date and Time",
+    "Icon": "preferences-system-time",
+    "Version": "1.0.0",
+    "License": "MIT",
+    "Authors": [
+      {
+        "Name": "Arda Aras Cavdur"
+      }
+    ]
+  }
+}

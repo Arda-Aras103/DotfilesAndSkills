@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=ULTRAKILL V1 Boot
+Description=ULTRAKILL V1 inspired hardware calibration terminal boot splash
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/ultrakill
+ScriptFile=/usr/share/plymouth/themes/ultrakill/ultrakill.script

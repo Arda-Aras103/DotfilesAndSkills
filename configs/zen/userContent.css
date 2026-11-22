@@ -1,0 +1,9 @@
+/* Tokyo Night dark canvas for internal blank/newtab pages */
+@-moz-document url("about:newtab"), url("about:blank"), url("about:home"), url("about:privatebrowsing") {
+  html,
+  body {
+    background: #1a1b26 !important;
+    background-color: #1a1b26 !important;
+    color: #c0caf5 !important;
+  }
+}

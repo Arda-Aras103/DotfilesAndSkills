@@ -1,0 +1,58 @@
+{
+  "providers": [
+    {
+      "id": "antigravity",
+      "name": "Antigravity (agy)",
+      "role": "Primary Orchestrator",
+      "kind": "antigravity_statusline",
+      "enabled": true,
+      "notes": "For live quota, run inside agy: /statusline /workspace/apps/ai-quota/agy_statusline.py"
+    },
+    {
+      "id": "openrouter",
+      "name": "OpenRouter (:free)",
+      "role": "Primary Coding Subagent",
+      "kind": "openrouter_key",
+      "env_var": "OPENROUTER_API_KEY",
+      "opencode_provider": "openrouter",
+      "enabled": true,
+      "dashboard_url": "https://openrouter.ai/settings/keys"
+    },
+    {
+      "id": "groq",
+      "name": "Groq (LPU)",
+      "role": "Fast Scripts & Checks",
+      "kind": "openai_ratelimit_probe",
+      "env_var": "GROQ_API_KEY",
+      "opencode_provider": "groq",
+      "base_url": "https://api.groq.com/openai/v1",
+      "probe_model": "openai/gpt-oss-120b",
+      "enabled": true,
+      "dashboard_url": "https://console.groq.com/settings/limits"
+    },
+    {
+      "id": "google",
+      "name": "Google AI Studio",
+      "role": "Large Context (Gemini 2.5 Flash)",
+      "kind": "opencode_provider",
+      "env_var": "GEMINI_API_KEY",
+      "alt_env_vars": [
+        "GOOGLE_GENERATIVE_AI_API_KEY"
+      ],
+      "opencode_provider": "google",
+      "enabled": true,
+      "dashboard_url": "https://aistudio.google.com/rate-limit",
+      "notes": "Google AI Studio does not provide a live remaining RPD API; used requests/tokens and last 429 status are shown."
+    },
+    {
+      "id": "opencode",
+      "name": "OpenCode Zen (Free)",
+      "role": "Zero-Key Fallback",
+      "kind": "opencode_provider",
+      "opencode_provider": "opencode",
+      "enabled": true,
+      "dashboard_url": "https://opencode.ai",
+      "notes": "Anonymous/free pool; shows reset countdown when a 429 is received."
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+! Title: Zen Hidden Opportunities (Example)
+! Description: Cosmetic uBlock Origin filter list for hiding reviewed/skipped listings.
+! Expires: 1 hours
+!
+! Example rule:
+! example.com##a[href*="/jobs/example-role" i]:upward(article, li, [class*="card"])

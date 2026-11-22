@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="640" height="640">
+  <defs>
+    <radialGradient id="creamHalo" cx="50%" cy="50%" r="54%">
+      <stop offset="0%" stop-color="#f5eccd"/>
+      <stop offset="68%" stop-color="#e5d7af"/>
+      <stop offset="100%" stop-color="#d8cba8"/>
+    </radialGradient>
+    <linearGradient id="monolith" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#282726"/>
+      <stop offset="100%" stop-color="#3c3a37"/>
+    </linearGradient>
+    <pattern id="gridLines" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#282726" stroke-opacity="0.14" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="640" height="640" fill="url(#creamHalo)"/>
+  <rect x="36" y="36" width="568" height="568" fill="url(#gridLines)" stroke="#282726" stroke-width="2"/>
+
+  <!-- Outer perspective tunnel lines -->
+  <g stroke="#282726" stroke-width="1.5" fill="none" opacity="0.82">
+    <rect x="88" y="88" width="464" height="464"/>
+    <rect x="148" y="148" width="344" height="344"/>
+    <rect x="206" y="206" width="228" height="228"/>
+    <line x1="36" y1="36" x2="206" y2="206"/>
+    <line x1="604" y1="36" x2="434" y2="206"/>
+    <line x1="36" y1="604" x2="206" y2="434"/>
+    <line x1="604" y1="604" x2="434" y2="434"/>
+    <line x1="320" y1="36" x2="320" y2="206"/>
+    <line x1="320" y1="604" x2="320" y2="434"/>
+    <line x1="36" y1="320" x2="206" y2="320"/>
+    <line x1="604" y1="320" x2="434" y2="320"/>
+  </g>
+
+  <!-- Abstract geometric monolith & cyber reticle -->
+  <g transform="translate(320 320)">
+    <polygon points="0,-138 118,-36 74,124 -74,124 -118,-36" fill="#d8cba8" stroke="#282726" stroke-width="2.5"/>
+    <polygon points="0,-108 88,-26 54,96 -54,96 -88,-26" fill="url(#monolith)"/>
+    <polygon points="0,-78 58,-16 34,68 -34,68 -58,-16" fill="none" stroke="#f5eccd" stroke-width="1.8" stroke-dasharray="6 4"/>
+    <circle cx="0" cy="-6" r="34" fill="#f5eccd" stroke="#282726" stroke-width="2.5"/>
+    <circle cx="0" cy="-6" r="14" fill="#282726"/>
+    <line x1="-150" y1="-6" x2="-48" y2="-6" stroke="#282726" stroke-width="2"/>
+    <line x1="48" y1="-6" x2="150" y2="-6" stroke="#282726" stroke-width="2"/>
+    <line x1="0" y1="-150" x2="0" y2="-52" stroke="#282726" stroke-width="2"/>
+    <line x1="0" y1="40" x2="0" y2="150" stroke="#282726" stroke-width="2"/>
+  </g>
+
+  <!-- Corner registration marks -->
+  <g stroke="#282726" stroke-width="2.5" fill="none">
+    <path d="M 20 52 L 20 20 L 52 20"/>
+    <path d="M 588 20 L 620 20 L 620 52"/>
+    <path d="M 20 588 L 20 620 L 52 620"/>
+    <path d="M 588 620 L 620 620 L 620 588"/>
+  </g>
+</svg>

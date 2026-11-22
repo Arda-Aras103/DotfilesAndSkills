@@ -1,0 +1,67 @@
+Window.SetBackgroundTopColor(0.047, 0.039, 0.031);
+Window.SetBackgroundBottomColor(0.047, 0.039, 0.031);
+
+screen_w = Window.GetWidth();
+screen_h = Window.GetHeight();
+cx = screen_w / 2;
+cy = screen_h / 2;
+
+title_img = Image.Text("SYSTEM // BOOTING", 0.933, 0.898, 0.867, 1.0, "JetBrainsMono Nerd Font Bold 14");
+title_sprite = Sprite(title_img);
+title_sprite.SetPosition(cx - title_img.GetWidth() / 2, cy - 36, 10);
+
+bar_w = 320;
+bar_h = 6;
+bar_x = cx - bar_w / 2;
+bar_y = cy + 6;
+
+border_raw = Image("bar-border.png");
+border_sprite = Sprite(border_raw.Scale(bar_w + 4, bar_h + 4));
+border_sprite.SetPosition(bar_x - 2, bar_y - 2, 8);
+
+bg_raw = Image("bar-bg.png");
+bg_sprite = Sprite(bg_raw.Scale(bar_w, bar_h));
+bg_sprite.SetPosition(bar_x, bar_y, 9);
+
+fill_raw = Image("bar-fill.png");
+fill_sprite = Sprite(fill_raw.Scale(2, bar_h));
+fill_sprite.SetPosition(bar_x, bar_y, 10);
+
+prompt_sprite = Sprite();
+bullets_sprite = Sprite();
+msg_sprite = Sprite();
+
+fun boot_progress_cb(duration, progress) {
+    w = Math.Int(bar_w * progress);
+    if (w < 2) w = 2;
+    fill_sprite.SetImage(fill_raw.Scale(w, bar_h));
+}
+Plymouth.SetBootProgressFunction(boot_progress_cb);
+
+fun display_password_cb(prompt, bullets) {
+    p_img = Image.Text(prompt, 0.757, 0.612, 0.482, 1.0, "JetBrainsMono Nerd Font 12");
+    prompt_sprite.SetImage(p_img);
+    prompt_sprite.SetPosition(cx - p_img.GetWidth() / 2, bar_y + 34, 10);
+
+    dots = "";
+    for (i = 0; i < bullets; i++) {
+        dots += "*";
+    }
+    b_img = Image.Text(dots, 0.933, 0.898, 0.867, 1.0, "JetBrainsMono Nerd Font Bold 14");
+    bullets_sprite.SetImage(b_img);
+    bullets_sprite.SetPosition(cx - b_img.GetWidth() / 2, bar_y + 60, 10);
+}
+Plymouth.SetDisplayPasswordFunction(display_password_cb);
+
+fun display_normal_cb() {
+    prompt_sprite.SetOpacity(0);
+    bullets_sprite.SetOpacity(0);
+}
+Plymouth.SetDisplayNormalFunction(display_normal_cb);
+
+fun message_cb(text) {
+    m_img = Image.Text(text, 0.663, 0.694, 0.839, 0.9, "JetBrainsMono Nerd Font 11");
+    msg_sprite.SetImage(m_img);
+    msg_sprite.SetPosition(cx - m_img.GetWidth() / 2, bar_y + 92, 10);
+}
+Plymouth.SetMessageFunction(message_cb);

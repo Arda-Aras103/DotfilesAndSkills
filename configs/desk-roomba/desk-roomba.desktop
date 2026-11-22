@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Desk Roomba
+GenericName=Desktop File Organizer Overlay
+Comment=Wayland layer-shell robot vacuum that sweeps loose desktop files into Organized/
+Exec=python3 -B /home/ardaaras/agy-docker/workspace/configs/desk-roomba/desk_roomba.py --layer bottom --sweep --auto-watch
+Icon=edit-clear-all
+Terminal=false
+Categories=Utility;FileTools;
+Keywords=roomba;vacuum;desktop;wayland;organize;
+StartupNotify=false

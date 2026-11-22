@@ -1,0 +1,106 @@
+/* Tokyo Night (Canonical Workspace Palette) for Obsidian */
+.theme-dark {
+  --background-primary: #1a1b26;
+  --background-primary-alt: #16161e;
+  --background-secondary: #16161e;
+  --background-secondary-alt: #16161e;
+
+  --background-modifier-hover: #283457;
+  --background-modifier-active-hover: #33467c;
+  --background-modifier-border: #2f3549;
+  --background-modifier-border-hover: #3b4261;
+  --background-modifier-border-focus: #7aa2f7;
+  --background-modifier-form-field: #24283b;
+  --background-modifier-cover: rgba(22, 22, 30, 0.85);
+
+  --text-normal: #c0caf5;
+  --text-muted: #a9b1d6;
+  --text-faint: #565f89;
+  --text-accent: #7aa2f7;
+  --text-accent-hover: #89b4fa;
+  --text-on-accent: #1a1b26;
+
+  --interactive-normal: #24283b;
+  --interactive-hover: #283457;
+  --interactive-accent: #7aa2f7;
+  --interactive-accent-hover: #89b4fa;
+
+  --color-red: #f7768e;
+  --color-orange: #e0af68;
+  --color-yellow: #e0af68;
+  --color-green: #9ece6a;
+  --color-cyan: #7dcfff;
+  --color-blue: #7aa2f7;
+  --color-purple: #bb9af7;
+  --color-pink: #f7768e;
+
+  --code-background: #16161e;
+  --code-normal: #c0caf5;
+  --code-comment: #565f89;
+  --code-function: #7aa2f7;
+  --code-keyword: #bb9af7;
+  --code-string: #9ece6a;
+  --code-value: #e0af68;
+  --code-operator: #7dcfff;
+
+  --blockquote-border-color: #7aa2f7;
+  --link-color: #7aa2f7;
+  --link-color-hover: #89b4fa;
+  --link-external-color: #7dcfff;
+  --tag-background: #24283b;
+  --tag-color: #7aa2f7;
+  --tag-border-color: #2f3549;
+
+  --titlebar-background: #16161e;
+  --titlebar-background-focused: #16161e;
+  --tab-background-active: #1a1b26;
+  --ribbon-background: #16161e;
+  --ribbon-background-collapsed: #16161e;
+  --status-bar-background: #16161e;
+  --modal-background: #1a1b26;
+  --modal-border-color: #3b4261;
+  --prompt-border-color: #3b4261;
+  --scrollbar-thumb-bg: #2f3549;
+  --scrollbar-active-thumb-bg: #3b4261;
+
+  --font-monospace-theme: "JetBrainsMono Nerd Font", monospace;
+  --file-line-width: 820px;
+  --line-height-normal: 1.65;
+  --h1-color: #7aa2f7;
+  --h2-color: #7dcfff;
+  --h3-color: #9ece6a;
+  --h4-color: #bb9af7;
+}
+
+/* Minimal UI: hide left vertical ribbon & single-tab header bar */
+.workspace-ribbon.mod-left {
+  display: none;
+}
+
+.mod-root .workspace-tab-header-container:has(.workspace-tab-header-container-inner > .workspace-tab-header:only-child) {
+  display: none;
+}
+
+/* Clean empty tab state */
+.empty-state-title {
+  color: var(--text-muted);
+}
+
+/* QoL: subtle active line highlight & slim Tokyo Night scrollbars */
+.markdown-source-view.mod-cm6 .cm-active {
+  background-color: rgba(40, 52, 87, 0.22);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-bg);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-active-thumb-bg);
+}
